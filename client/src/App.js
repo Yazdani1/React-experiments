@@ -11,7 +11,7 @@ function App() {
 
   //input filed data
 
-  const [countresult, setCountresult] = useState("");
+  const [countresult, setCountresult] = useState(0);
   const [inputdata, setInputdata] = useState("");
 
   //to work with select option
@@ -48,6 +48,8 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
+
+    setCountresult("");
   };
 
   const addsumTwonumbers = (e) => {
@@ -87,12 +89,15 @@ function App() {
 
         <p>{parseInt(singleuser.id) * parseInt(singleuser.id)}</p>
 
-        <h1>Result is: {parseFloat(countresult).toFixed( 2 )}</h1>
-
         {singleuser.id && <p>Now can show input field</p>}
 
         {singleuser.id && (
           <form>
+            <h1>
+              {countresult && <p>Result is:</p>}
+              {countresult ? parseFloat(countresult).toFixed(2) : countresult}
+            </h1>
+
             <div>
               <label>Add Change Date: {inputdata}</label>
               <input
