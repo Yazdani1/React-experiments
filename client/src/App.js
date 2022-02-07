@@ -1,25 +1,15 @@
 import logo from "./logo.svg";
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import SelectOption from "react-select/async";
 
 function App() {
-  const url = "https://jsonplaceholder.typicode.com/posts";
+  const url = "https://jsonplaceholder.typicode.com/users";
+  const singleurl = "https://jsonplaceholder.typicode.com/users/";
 
   const [alldata, setAlldata] = useState([]);
+  const [singleuser, setSingleuser] = useState([]);
 
   //to work with select option
-
-  const [inputvalue, setInputvalue] = useState("");
-  const [selectedValue, setSelectedvalue] = useState(null);
-
-  const handleInputchange = (value) => {
-    setInputvalue(value);
-  };
-
-  const handleChange = (value) => {
-    setSelectedvalue(value);
-  };
 
   const loadData = () => {
     fetch(url, {
@@ -39,17 +29,48 @@ function App() {
     loadData();
   }, []);
 
+  const handleClick = (e) => {
+
+    fetch(singleurl+e.target.value, {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setSingleuser(result);
+        console.log("Our Data from api is:" + result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <React.Fragment>
       <div className="main-container">
         <h5>Selete List Items</h5>
-        <select>
+        <select onChange={handleClick}>
+          <option value="0">---Select Username---</option>
           {alldata.map((item, index) => (
             <>
-              <option value={item.id}>{item.title}</option>
+              <option key={item.id} value={item.id}>
+                {item.name}
+              </option>
             </>
           ))}
         </select>
+        {/* <p>{singleuser.name}</p> */}
+        <p>{singleuser.name}</p>
+        <p>{singleuser.email}</p>
+        <p>{singleuser.address?.street}</p>
+
+        <p>{singleuser.address?.city}</p>
+
+        <p>Phone:{singleuser.phone}</p>
+        <p>{singleuser.website}</p>
+
+
+        <p>{JSON.stringify(singleuser)}</p>
+
       </div>
     </React.Fragment>
   );
